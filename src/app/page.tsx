@@ -293,7 +293,7 @@ export default function CanvasFlowApp() {
               <button
                 key={f.key}
                 onClick={() => setActiveFilter(f.key)}
-                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap ${
+                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap cursor-pointer ${
                   activeFilter === f.key
                     ? 'bg-indigo-600 text-white shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
@@ -313,7 +313,7 @@ export default function CanvasFlowApp() {
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setSetting('showTodayFocus', !s.showTodayFocus)}
-                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center ${
+                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer ${
                       s.showTodayFocus
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
@@ -329,7 +329,7 @@ export default function CanvasFlowApp() {
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setSetting('showInbox', !s.showInbox)}
-                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center ${
+                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer ${
                       s.showInbox
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
@@ -348,7 +348,7 @@ export default function CanvasFlowApp() {
           {/* New Project */}
           <button
             onClick={() => setShowNewProject(true)}
-            className="whitespace-nowrap flex-shrink-0 px-4.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full text-[11px] font-bold flex items-center gap-1 transition-all shadow-sm shadow-indigo-100"
+            className="whitespace-nowrap flex-shrink-0 px-4.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full text-[11px] font-bold flex items-center gap-1 transition-all shadow-sm shadow-indigo-100 cursor-pointer"
           >
             <Plus size={12} />
             New Project

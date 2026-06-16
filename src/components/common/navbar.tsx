@@ -48,7 +48,7 @@ export function FloatingNav({
       <div className="flex bg-slate-100 rounded-lg p-0.5 border border-slate-200/20">
         <button
           onClick={() => onTabChange('projects')}
-          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all ${
+          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
             activeTab === 'projects'
               ? 'bg-white text-slate-800 shadow-sm'
               : 'text-slate-400 hover:text-slate-700'
@@ -59,7 +59,7 @@ export function FloatingNav({
         </button>
         <button
           onClick={() => onTabChange('draw')}
-          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all ${
+          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
             activeTab === 'draw'
               ? 'bg-white text-slate-800 shadow-sm'
               : 'text-slate-400 hover:text-slate-700'
@@ -81,7 +81,7 @@ export function FloatingNav({
             <TooltipTrigger asChild>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 <Upload size={14} />
               </button>
@@ -94,7 +94,7 @@ export function FloatingNav({
             <TooltipTrigger asChild>
               <button
                 onClick={onExport}
-                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 <Download size={14} />
               </button>
@@ -107,7 +107,7 @@ export function FloatingNav({
             <TooltipTrigger asChild>
               <button
                 onClick={onOpenReport}
-                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 <FileText size={14} />
               </button>
@@ -120,7 +120,7 @@ export function FloatingNav({
             <TooltipTrigger asChild>
               <button
                 onClick={onReset}
-                className="p-1.5 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                className="p-1.5 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
               >
                 <RotateCcw size={14} />
               </button>
