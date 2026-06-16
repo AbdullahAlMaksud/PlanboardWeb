@@ -1,6 +1,6 @@
-# 🚀 CanvasFlow
+# 🚀 Planboard
 
-CanvasFlow is a premium, high-performance project tracker and visual drawing whiteboard built on an infinite canvas. It combines structural task tracking (Kanban-style cards) with spatial drawing tools (whiteboard sketches, shape annotations, and sticky notes) to provide a visually rich and interactive workspace.
+Planboard is a premium, high-performance project tracker and visual drawing whiteboard built on an infinite canvas. It combines structural task tracking (Kanban-style cards) with spatial drawing tools (whiteboard sketches, shape annotations, and sticky notes) to provide a visually rich and interactive workspace.
 
 ---
 
@@ -33,7 +33,7 @@ CanvasFlow is a premium, high-performance project tracker and visual drawing whi
 
 ### Folder Structure
 ```
-canvasflow
+planboard
 ├── public/              # Static public assets
 └── src/
     ├── app/             # Next.js App Router (pages and layouts)

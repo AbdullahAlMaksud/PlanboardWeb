@@ -37,7 +37,7 @@ export function FloatingNav({
       <div className="flex items-center gap-1.5 flex-shrink-0 group cursor-pointer">
         <AnimatedLogo size={20} />
         <span className="font-bold text-slate-800 text-xs bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent tracking-tight group-hover:opacity-80 transition-opacity">
-          CanvasFlow
+          Planboard
         </span>
       </div>
 

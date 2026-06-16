@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'CanvasFlow — Personal Project Canvas',
+  title: 'Planboard — Personal Project Canvas',
   description: 'A beautiful freeform canvas for managing personal projects and tasks.',
   icons: {
     icon: '/favicon.svg',

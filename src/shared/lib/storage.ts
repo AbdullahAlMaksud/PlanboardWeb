@@ -1,6 +1,6 @@
 import { WorkspaceData, AppSettings } from '@/shared/types/canvasflow';
 
-const STORAGE_KEY = 'canvasflow-workspace-v1';
+const STORAGE_KEY = 'planboard-workspace-v1';
 
 const DEFAULT_SETTINGS: AppSettings = {
   showTodayFocus: true, showInbox: false,
@@ -13,7 +13,10 @@ const DEFAULT_SETTINGS: AppSettings = {
 export function loadWorkspace(): WorkspaceData | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      raw = localStorage.getItem('canvasflow-workspace-v1');
+    }
     if (!raw) return null;
     return JSON.parse(raw) as WorkspaceData;
   } catch { return null; }
@@ -36,7 +39,7 @@ export function exportWorkspace(data: WorkspaceData): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `canvasflow-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = `planboard-backup-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
