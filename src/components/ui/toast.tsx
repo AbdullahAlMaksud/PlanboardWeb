@@ -15,7 +15,7 @@ interface ToastProps {
 
 export function ToastContainer({ toasts, onRemove }: ToastProps) {
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] flex flex-col gap-2 pointer-events-none">
       {toasts.map(toast => (
         <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
       ))}

@@ -39,6 +39,8 @@ export interface AppSettings {
   canvasOffset: { x: number; y: number }; canvasScale: number;
   drawMode: boolean; drawTool: DrawTool;
   drawColor: string; drawFill: string; drawWidth: number; drawFontSize: number; drawOpacity: number;
+  reportTemplateId?: string;
+  customReportTemplate?: string;
 }
 
 export interface WorkspaceData {

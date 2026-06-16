@@ -8,9 +8,10 @@ interface DialogProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-export function Dialog({ open, onClose, title, children }: DialogProps) {
+export function Dialog({ open, onClose, title, children, className }: DialogProps) {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -22,12 +23,12 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center">
       <div
         className="absolute inset-0 bg-black/20 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative z-10 bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 w-full max-w-md mx-4">
+      <div className={`relative z-10 bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 w-full mx-4 transition-all ${className || 'max-w-md'}`}>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold text-slate-900">{title}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>

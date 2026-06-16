@@ -254,7 +254,7 @@ export default function CanvasFlowApp() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-              className="fixed right-0 top-0 bottom-0 w-80 bg-white shadow-2xl border-l border-slate-200/50 z-[100] flex flex-col pointer-events-auto overflow-hidden"
+              className="fixed right-0 top-0 bottom-0 w-[420px] bg-white shadow-2xl border-l border-slate-200/50 z-[100] flex flex-col pointer-events-auto overflow-hidden"
             >
               <ProjectDetailsPanel
                 project={selectedProject} focusTasks={workspace.focusTasks}
@@ -365,6 +365,8 @@ export default function CanvasFlowApp() {
         onClose={() => setShowWorkReport(false)}
         projects={workspace.projects}
         onCopied={() => addToast('Report copied to clipboard', 'success')}
+        settings={workspace.settings}
+        onUpdateSettings={(up) => update(w => ({ ...w, settings: { ...w.settings, ...up } }))}
       />
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />

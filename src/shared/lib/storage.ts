@@ -8,6 +8,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   drawMode: false, drawTool: 'pencil',
   drawColor: '#1e293b', drawFill: 'transparent', drawWidth: 2,
   drawFontSize: 16, drawOpacity: 1,
+  reportTemplateId: 'detailed',
+  customReportTemplate: '',
 };
 
 export function loadWorkspace(): WorkspaceData | null {
