@@ -1,6 +1,6 @@
-# 🚀 Planboard
+# 🚀 Planboard AI
 
-Planboard is a premium, high-performance project tracker and visual drawing whiteboard built on an infinite canvas. It combines structural task tracking (Kanban-style cards) with spatial drawing tools (whiteboard sketches, shape annotations, and sticky notes) to provide a visually rich and interactive workspace.
+Planboard AI is a premium, high-performance project tracker and visual drawing whiteboard built on an infinite canvas, powered by Gemini AI. It combines structural task tracking (Kanban-style cards) with spatial drawing tools (whiteboard sketches, shape annotations, and sticky notes) and AI-assisted status reports to provide an intelligent, visually rich, and interactive workspace.
 
 ---
 
@@ -20,7 +20,7 @@ Planboard is a premium, high-performance project tracker and visual drawing whit
   - Select, move, resize, and delete vector drawings on the canvas.
 - **Today Focus Panel**: Pin up to 3 priority tasks from different cards to stay focused.
 - **Quick Inbox**: Capture ideas on the fly and transition them into cards when ready.
-- **Automated Work Reports**: Compile and copy daily status updates of all active cards to your clipboard with one click.
+- **AI-Powered Automated Work Reports**: Compile daily status updates of all active cards, auto-polish spelling/grammar, rewrite in 4 custom tones (Concise, Professional, Bullets, Executive) using Gemini AI, and batch-export/download files.
 
 ---
 

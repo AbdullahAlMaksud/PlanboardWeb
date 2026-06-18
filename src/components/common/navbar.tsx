@@ -34,11 +34,16 @@ export function FloatingNav({
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-slate-200/60 rounded-full shadow-lg px-4 py-1.5 flex items-center gap-5 z-50 pointer-events-auto select-none max-w-[95vw]">
       {/* Brand logo & title */}
-      <div className="flex items-center gap-1.5 flex-shrink-0 group cursor-pointer">
+      <div className="flex items-center gap-1.5 flex-shrink-0 group cursor-pointer relative">
         <AnimatedLogo size={20} />
-        <span className="font-bold text-slate-800 text-xs bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent tracking-tight group-hover:opacity-80 transition-opacity">
-          Planboard
-        </span>
+        <div className="flex items-start gap-0.5">
+          <span className="font-bold text-slate-800 text-xs bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent tracking-tight group-hover:opacity-80 transition-opacity">
+            Planboard
+          </span>
+          <span className="text-[7px] font-extrabold bg-indigo-600 text-white px-1 py-0.2 rounded-xs uppercase tracking-wider scale-90 -translate-y-1 select-none">
+            AI
+          </span>
+        </div>
       </div>
 
       {/* Vertical separator */}
@@ -107,12 +112,16 @@ export function FloatingNav({
             <TooltipTrigger asChild>
               <button
                 onClick={onOpenReport}
-                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer relative"
               >
                 <FileText size={14} />
+                <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                </span>
               </button>
             </TooltipTrigger>
-            <TooltipContent>Work Report</TooltipContent>
+            <TooltipContent>AI Work Report</TooltipContent>
           </Tooltip>
 
           {/* Reset */}

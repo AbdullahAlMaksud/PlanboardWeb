@@ -136,7 +136,7 @@ export default function CanvasFlowApp() {
       <div className="h-full flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 animate-pulse" />
-          <p className="text-sm text-slate-400">Loading Planboard…</p>
+          <p className="text-sm text-slate-400">Loading Planboard AI…</p>
         </div>
       </div>
     );
