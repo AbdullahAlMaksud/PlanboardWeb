@@ -13,7 +13,7 @@ import { ConfirmDialog } from '@/features/project/components/confirm-dialog';
 import { ToastContainer, ToastData } from '@/components/ui/toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FloatingNav } from '@/components/common/navbar';
-import { WorkReportModal } from '@/features/project/components/work-report-modal';
+import { WorkReportModal } from '@/features/project/modal/work-report-modal';
 import { Search, Plus, Target, Inbox } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 
@@ -237,36 +237,36 @@ export default function CanvasFlowApp() {
           </CanvasBoard>
         </div>
 
-      <AnimatePresence>
-        {selectedProject && activeTab === 'projects' && (
-          <>
-            {/* Drawer backdrop overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedProjectId(null)}
-              className="fixed inset-0 bg-slate-900/10 backdrop-blur-xs z-[90] pointer-events-auto"
-            />
-            {/* Drawer Panel */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-              className="fixed right-0 top-0 bottom-0 w-[420px] bg-white shadow-2xl border-l border-slate-200/50 z-[100] flex flex-col pointer-events-auto overflow-hidden"
-            >
-              <ProjectDetailsPanel
-                project={selectedProject} focusTasks={workspace.focusTasks}
-                onUpdate={up => updateProject(selectedProject.id, up)}
-                onDelete={() => setConfirmDelete(selectedProject.id)}
-                onClose={() => setSelectedProjectId(null)}
-                onAddFocusTask={addFocus} onRemoveFocusTask={removeFocus}
+        <AnimatePresence>
+          {selectedProject && activeTab === 'projects' && (
+            <>
+              {/* Drawer backdrop overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedProjectId(null)}
+                className="fixed inset-0 bg-slate-900/10 backdrop-blur-xs z-[90] pointer-events-auto"
               />
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              {/* Drawer Panel */}
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 26, stiffness: 220 }}
+                className="fixed right-0 top-0 bottom-0 w-[420px] bg-white shadow-2xl border-l border-slate-200/50 z-[100] flex flex-col pointer-events-auto overflow-hidden"
+              >
+                <ProjectDetailsPanel
+                  project={selectedProject} focusTasks={workspace.focusTasks}
+                  onUpdate={up => updateProject(selectedProject.id, up)}
+                  onDelete={() => setConfirmDelete(selectedProject.id)}
+                  onClose={() => setSelectedProjectId(null)}
+                  onAddFocusTask={addFocus} onRemoveFocusTask={removeFocus}
+                />
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Projects mode bottom-center floating toolbar */}
@@ -293,11 +293,10 @@ export default function CanvasFlowApp() {
               <button
                 key={f.key}
                 onClick={() => setActiveFilter(f.key)}
-                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap cursor-pointer ${
-                  activeFilter === f.key
+                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap cursor-pointer ${activeFilter === f.key
                     ? 'bg-indigo-600 text-white shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
-                }`}
+                  }`}
               >
                 {f.label}
               </button>
@@ -313,11 +312,10 @@ export default function CanvasFlowApp() {
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setSetting('showTodayFocus', !s.showTodayFocus)}
-                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer ${
-                      s.showTodayFocus
+                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer ${s.showTodayFocus
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
-                    }`}
+                      }`}
                   >
                     <Target size={14} />
                   </button>
@@ -329,11 +327,10 @@ export default function CanvasFlowApp() {
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setSetting('showInbox', !s.showInbox)}
-                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer ${
-                      s.showInbox
+                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer ${s.showInbox
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
-                    }`}
+                      }`}
                   >
                     <Inbox size={14} />
                   </button>
@@ -359,7 +356,7 @@ export default function CanvasFlowApp() {
       <NewProjectDialog open={showNewProject} onClose={() => setShowNewProject(false)} onCreate={createProject} canvasCenter={{ x: 400, y: 300 }} />
       <ConfirmDialog open={confirmReset} title="Reset Workspace" message="Delete all projects and restore defaults. Cannot be undone." confirmLabel="Reset Everything" onConfirm={handleReset} onClose={() => setConfirmReset(false)} />
       <ConfirmDialog open={!!confirmDelete} title="Delete Project" message="Permanently delete this project and all tasks. Cannot be undone." confirmLabel="Delete Project" onConfirm={() => confirmDelete && deleteProject(confirmDelete)} onClose={() => setConfirmDelete(null)} />
-      
+
       <WorkReportModal
         open={showWorkReport}
         onClose={() => setShowWorkReport(false)}
