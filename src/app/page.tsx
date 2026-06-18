@@ -14,8 +14,9 @@ import { ToastContainer, ToastData } from '@/components/ui/toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FloatingNav } from '@/components/common/navbar';
 import { WorkReportModal } from '@/features/project/modal/work-report-modal';
-import { Search, Plus, Target, Inbox } from 'lucide-react';
+import { Search, Plus, Target, Inbox, Timer } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { PomodoroTimer } from '@/components/common/pomodoro-timer';
 
 function useToast() {
   const [toasts, setToasts] = useState<ToastData[]>([]);
@@ -60,6 +61,7 @@ export default function CanvasFlowApp() {
   const [activeFilter, setActiveFilter] = useState<FilterChip>('all');
   const [showNewProject, setShowNewProject] = useState(false);
   const [showWorkReport, setShowWorkReport] = useState(false);
+  const [showPomodoro, setShowPomodoro] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const { toasts, addToast, removeToast } = useToast();
@@ -337,6 +339,21 @@ export default function CanvasFlowApp() {
                 </TooltipTrigger>
                 <TooltipContent>Quick Inbox</TooltipContent>
               </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => setShowPomodoro(p => !p)}
+                    className={`p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer ${showPomodoro
+                        ? 'bg-indigo-50 text-indigo-600 font-bold'
+                        : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
+                      }`}
+                  >
+                    <Timer size={14} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Pomodoro Timer</TooltipContent>
+              </Tooltip>
             </div>
           </TooltipProvider>
 
@@ -366,6 +383,7 @@ export default function CanvasFlowApp() {
         onUpdateSettings={(up) => update(w => ({ ...w, settings: { ...w.settings, ...up } }))}
       />
 
+      <PomodoroTimer isOpen={showPomodoro} />
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );

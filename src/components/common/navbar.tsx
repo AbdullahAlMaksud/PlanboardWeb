@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { Layers, Pencil, Download, Upload, RotateCcw, FileText } from 'lucide-react';
 import { AnimatedLogo } from '../ui/animated-logo';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { ParentNavigator } from './parent-navigator';
 
 interface FloatingNavProps {
   activeTab: 'projects' | 'draw';
@@ -33,6 +34,8 @@ export function FloatingNav({
 
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-slate-200/60 rounded-full shadow-lg px-4 py-1.5 flex items-center gap-5 z-50 pointer-events-auto select-none max-w-[95vw]">
+      <ParentNavigator separatorRight={true} variant='plain' size={26} iconStroke='green' iconFill='#30a701' />
+
       {/* Brand logo & title */}
       <div className="flex items-center gap-1.5 flex-shrink-0 group cursor-pointer relative">
         <AnimatedLogo size={20} />
@@ -53,22 +56,20 @@ export function FloatingNav({
       <div className="flex bg-slate-100 rounded-lg p-0.5 border border-slate-200/20">
         <button
           onClick={() => onTabChange('projects')}
-          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
-            activeTab === 'projects'
-              ? 'bg-white text-slate-800 shadow-sm'
-              : 'text-slate-400 hover:text-slate-700'
-          }`}
+          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${activeTab === 'projects'
+            ? 'bg-white text-slate-800 shadow-sm'
+            : 'text-slate-400 hover:text-slate-700'
+            }`}
         >
           <Layers size={12} className={activeTab === 'projects' ? 'text-indigo-500' : ''} />
           Projects
         </button>
         <button
           onClick={() => onTabChange('draw')}
-          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
-            activeTab === 'draw'
-              ? 'bg-white text-slate-800 shadow-sm'
-              : 'text-slate-400 hover:text-slate-700'
-          }`}
+          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${activeTab === 'draw'
+            ? 'bg-white text-slate-800 shadow-sm'
+            : 'text-slate-400 hover:text-slate-700'
+            }`}
         >
           <Pencil size={12} className={activeTab === 'draw' ? 'text-indigo-500' : ''} />
           Draw

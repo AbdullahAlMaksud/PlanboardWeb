@@ -62,12 +62,25 @@ export function CanvasBoard({
   const panStart   = useRef({ mx: 0, my: 0, px: 0, py: 0 });
   const spaceRef   = useRef(false);
   const [spaceDown, setSpaceDown] = useState(false);
+  const [viewportSize, setViewportSize] = useState({ width: 1200, height: 800 });
+
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+    const updateSize = () => {
+      setViewportSize({ width: el.clientWidth, height: el.clientHeight });
+    };
+    updateSize();
+    const ob = new ResizeObserver(updateSize);
+    ob.observe(el);
+    return () => ob.disconnect();
+  }, []);
 
   // Keep refs in sync so event handlers always see current values
   useEffect(() => { panRef.current = pan; },  [pan]);
   useEffect(() => { zoomRef.current = zoom; }, [zoom]);
 
-  /* ── Wheel: Ctrl/Meta = zoom, plain = pan ─────────────────────────── */
+  /* ── Wheel: Ctrl/Meta = zoom, alt = horizontal pan, plain = pan ───── */
   useEffect(() => {
     const el = viewportRef.current;
     if (!el) return;
@@ -85,8 +98,11 @@ export function CanvasBoard({
           setPan(p => ({ x: cx - ratio * (cx - p.x), y: cy - ratio * (cy - p.y) }));
           return next;
         });
+      } else if (e.altKey) {
+        // alt + scroll = pan horizontally (using vertical scroll wheel input)
+        setPan(p => ({ x: p.x - (e.deltaY || e.deltaX), y: p.y }));
       } else {
-        // pan
+        // pan normally
         setPan(p => ({ x: p.x - e.deltaX, y: p.y - e.deltaY }));
       }
     };
@@ -142,6 +158,123 @@ export function CanvasBoard({
     if (!target.closest('[data-card]')) onSelectProject(null);
   }, [drawMode, onSelectProject]);
 
+  const handleUpdateProjectWithConnections = useCallback((id: string, updates: Partial<Project>) => {
+    const project = projects.find(p => p.id === id);
+    if (project && updates.position) {
+      const dx = updates.position.x - project.position.x;
+      const dy = updates.position.y - project.position.y;
+      
+      // Update any attached arrows
+      drawElements.forEach(el => {
+        if (el.type === 'arrow') {
+          const isStartAttached = el.startAttachId === id;
+          const isEndAttached = el.endAttachId === id;
+          
+          if (isStartAttached && isEndAttached) {
+            const changes: Partial<DrawElement> = {
+              x1: el.x1 + dx,
+              y1: el.y1 + dy,
+              x2: el.x2 + dx,
+              y2: el.y2 + dy,
+            };
+            if (el.controlPoint) {
+              changes.controlPoint = {
+                x: el.controlPoint.x + dx,
+                y: el.controlPoint.y + dy,
+              };
+            }
+            onUpdateElement(el.id, changes);
+          } else if (isStartAttached) {
+            const changes: Partial<DrawElement> = {
+              x1: el.x1 + dx,
+              y1: el.y1 + dy,
+            };
+            if (el.controlPoint) {
+              changes.controlPoint = {
+                x: el.controlPoint.x + dx / 2,
+                y: el.controlPoint.y + dy / 2,
+              };
+            }
+            onUpdateElement(el.id, changes);
+          } else if (isEndAttached) {
+            const changes: Partial<DrawElement> = {
+              x2: el.x2 + dx,
+              y2: el.y2 + dy,
+            };
+            if (el.controlPoint) {
+              changes.controlPoint = {
+                x: el.controlPoint.x + dx / 2,
+                y: el.controlPoint.y + dy / 2,
+              };
+            }
+            onUpdateElement(el.id, changes);
+          }
+        }
+      });
+    }
+    onUpdateProject(id, updates);
+  }, [projects, drawElements, onUpdateElement, onUpdateProject]);
+
+  const handleUpdateStickyWithConnections = useCallback((id: string, changes: any) => {
+    if (changes.x !== undefined || changes.y !== undefined) {
+      const orig = drawElements.find(el => el.id === id);
+      if (orig && orig.type === 'sticky') {
+        const dx = changes.x !== undefined ? changes.x - orig.x : 0;
+        const dy = changes.y !== undefined ? changes.y - orig.y : 0;
+        
+        if (dx !== 0 || dy !== 0) {
+          drawElements.forEach(el => {
+            if (el.type === 'arrow') {
+              const isStartAttached = el.startAttachId === id;
+              const isEndAttached = el.endAttachId === id;
+              
+              if (isStartAttached && isEndAttached) {
+                const arrowChanges: Partial<Extract<DrawElement, { type: 'arrow' }>> = {
+                  x1: el.x1 + dx,
+                  y1: el.y1 + dy,
+                  x2: el.x2 + dx,
+                  y2: el.y2 + dy,
+                };
+                if (el.controlPoint) {
+                  arrowChanges.controlPoint = {
+                    x: el.controlPoint.x + dx,
+                    y: el.controlPoint.y + dy,
+                  };
+                }
+                onUpdateElement(el.id, arrowChanges);
+              } else if (isStartAttached) {
+                const arrowChanges: Partial<Extract<DrawElement, { type: 'arrow' }>> = {
+                  x1: el.x1 + dx,
+                  y1: el.y1 + dy,
+                };
+                if (el.controlPoint) {
+                  arrowChanges.controlPoint = {
+                    x: el.controlPoint.x + dx / 2,
+                    y: el.controlPoint.y + dy / 2,
+                  };
+                }
+                onUpdateElement(el.id, arrowChanges);
+              } else if (isEndAttached) {
+                const arrowChanges: Partial<Extract<DrawElement, { type: 'arrow' }>> = {
+                  x2: el.x2 + dx,
+                  y2: el.y2 + dy,
+                };
+                if (el.controlPoint) {
+                  arrowChanges.controlPoint = {
+                    x: el.controlPoint.x + dx / 2,
+                    y: el.controlPoint.y + dy / 2,
+                  };
+                }
+                onUpdateElement(el.id, arrowChanges);
+              }
+            }
+          });
+        }
+      }
+    }
+    onUpdateElement(id, changes);
+  }, [drawElements, onUpdateElement]);
+
   const cursor = isPanning.current ? 'grabbing' : spaceDown ? 'grab' : 'default';
 
   return (
@@ -174,33 +307,35 @@ export function CanvasBoard({
         }}
         onClick={handleWorldClick}
       >
-        {/* Draw canvas layer */}
-        {activeTab === 'draw' && (
-          <DrawLayer
-            elements={drawElements.filter(el => el.type !== 'sticky')}
-            tool={drawTool}
-            color={drawColor}
-            fill={drawFill}
-            width={drawWidth}
-            fontSize={drawFontSize}
-            opacity={drawOpacity}
-            enabled={drawMode && !spaceDown}
-            selectedIds={selectedDrawIds}
-            onAddElement={onAddElement}
-            onUpdateElement={onUpdateElement}
-            onDeleteElements={onDeleteElements}
-            onSelectIds={onSelectDrawIds}
-            zoom={zoom}
-          />
-        )}
+        {/* Draw canvas layer - always rendered, enabled in draw mode */}
+        <DrawLayer
+          elements={drawElements.filter(el => el.type !== 'sticky')}
+          allElements={drawElements}
+          projects={projects}
+          tool={drawTool}
+          color={drawColor}
+          fill={drawFill}
+          width={drawWidth}
+          fontSize={drawFontSize}
+          opacity={drawOpacity}
+          enabled={activeTab === 'draw' && drawMode && !spaceDown}
+          selectedIds={selectedDrawIds}
+          onAddElement={onAddElement}
+          onUpdateElement={onUpdateElement}
+          onDeleteElements={onDeleteElements}
+          onSelectIds={onSelectDrawIds}
+          zoom={zoom}
+          pan={pan}
+          viewportSize={viewportSize}
+        />
 
-        {/* Sticky notes */}
-        {activeTab === 'draw' && drawElements.filter(el => el.type === 'sticky').map(el => (
+        {/* Sticky notes - always rendered */}
+        {drawElements.filter(el => el.type === 'sticky').map(el => (
           <StickyNote
             key={el.id}
             element={el}
             zoom={zoom}
-            onUpdate={(changes) => onUpdateElement(el.id, changes)}
+            onUpdate={(changes) => handleUpdateStickyWithConnections(el.id, changes)}
             onDelete={() => { onDeleteElements([el.id]); onSelectDrawIds([]); }}
           />
         ))}
@@ -212,7 +347,7 @@ export function CanvasBoard({
             project={project}
             isSelected={selectedId === project.id}
             onSelect={() => !drawMode && onSelectProject(project.id)}
-            onUpdate={updates => onUpdateProject(project.id, updates)}
+            onUpdate={updates => handleUpdateProjectWithConnections(project.id, updates)}
             onDelete={() => onDeleteProject(project.id)}
             zoom={zoom}
           />

@@ -6,7 +6,7 @@ Planboard AI is a premium, high-performance project tracker and visual drawing w
 
 ## ✨ Features
 
-- **Infinite Canvas Board**: Smooth panning (middle-click or Space+drag) and zoom controls (Ctrl+Scroll) with a responsive dot-grid background.
+- **Infinite Canvas Board**: Smooth panning (middle-click or Space+drag), zoom controls (Ctrl+Scroll), and **Alt+Scroll Horizontal Panning** for fast lateral navigation across a high-resolution, responsive dot-grid backdrop.
 - **Interactive Project Cards**:
   - Double-click to edit card title and description.
   - Status tab filters (`All`, `Todo`, `Doing`, `Done`) with progress indicators.
@@ -15,9 +15,17 @@ Planboard AI is a premium, high-performance project tracker and visual drawing w
   - Collapse/Minimize cards to clear up clutter.
 - **Drawing Whiteboard (Vector Draw Layer)**:
   - Vector pen drawing with custom strokes, opacity, and custom colors.
-  - Draw rectangles, ellipses, and flow arrows with customizeable fills.
+  - Draw rectangles, ellipses, and flow arrows with customizable fills.
+  - Selected shapes (rectangles and ellipses) render draggable corner corner handles (`TL`, `TR`, `BL`, `BR`) for easy resizing.
+  - Smart connection arrows: Resizing shapes dynamically translates snapped arrow endpoints relative to their closest borders.
   - Add text blocks and drag-and-drop color-coded **Sticky Notes**.
   - Select, move, resize, and delete vector drawings on the canvas.
+- **Dynamic Pomodoro Focus Timer**: 
+  - Toggle-triggered floating card that persists ticking in the background.
+  - **Dynamic Island Collapsing**: Running timers morph from full size down to a sleek compact pill widget (`220px` x `56px`) showing time progress percentage and quick pause.
+  - **Tactile Audio Engine**: Plays minor tick/click sound feedback on user clicks and a pleasant major arpeggio completion chime (with quick Mute toggle).
+  - **Steppers Mode Adjustments**: Set custom durations for `Focus`, `Short Break`, and `Long Break` using custom +/- button steppers.
+- **Universal Parent Navigator**: Highly customizable, accessible, div-based navigation component with dynamic styling variants (`filled`, `outline`, `plain`), custom border separators, custom outline/fill SVG mapping, and dynamic sizing support.
 - **Today Focus Panel**: Pin up to 3 priority tasks from different cards to stay focused.
 - **Quick Inbox**: Capture ideas on the fly and transition them into cards when ready.
 - **AI-Powered Automated Work Reports**: Compile daily status updates of all active cards, auto-polish spelling/grammar, rewrite in 4 custom tones (Concise, Professional, Bullets, Executive) using Gemini AI, and batch-export/download files.

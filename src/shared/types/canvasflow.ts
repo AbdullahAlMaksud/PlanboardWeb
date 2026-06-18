@@ -11,7 +11,7 @@ export type DrawElement =
   | { id: string; type: 'stroke'; points: Point[]; color: string; width: number; opacity: number }
   | { id: string; type: 'rect';   x: number; y: number; w: number; h: number; color: string; fill: string; width: number; opacity: number }
   | { id: string; type: 'ellipse'; x: number; y: number; w: number; h: number; color: string; fill: string; width: number; opacity: number }
-  | { id: string; type: 'arrow';  x1: number; y1: number; x2: number; y2: number; color: string; width: number; opacity: number }
+  | { id: string; type: 'arrow';  x1: number; y1: number; x2: number; y2: number; color: string; width: number; opacity: number; startAttachId?: string; endAttachId?: string; controlPoint?: Point }
   | { id: string; type: 'text';   x: number; y: number; text: string; color: string; fontSize: number; opacity: number }
   | { id: string; type: 'sticky'; x: number; y: number; text: string; color: string; opacity?: number };
 
