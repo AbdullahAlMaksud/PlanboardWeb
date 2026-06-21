@@ -66,13 +66,16 @@ export function FloatingNav({
         </button>
         <button
           onClick={() => onTabChange('draw')}
-          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${activeTab === 'draw'
+          className={`px-3 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 transition-all cursor-pointer relative ${activeTab === 'draw'
             ? 'bg-white text-slate-800 shadow-sm'
             : 'text-slate-400 hover:text-slate-700'
             }`}
         >
           <Pencil size={12} className={activeTab === 'draw' ? 'text-indigo-500' : ''} />
-          Draw
+          <span>Draw</span>
+          <span className="absolute -top-1.5 -right-1 text-[7px] font-extrabold bg-orange-600 text-white px-1 py-0.5 rounded-sm uppercase tracking-wider scale-85 select-none">
+            Beta
+          </span>
         </button>
       </div>
 
