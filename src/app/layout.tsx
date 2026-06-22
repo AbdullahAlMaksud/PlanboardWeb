@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 
-                (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined) ||
-                (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined) ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
 export const metadata: Metadata = {
-  title: 'Planboard AI — Personal Project Canvas',
+  title: 'Planboard — AI-powered Personal Project Canvas',
   description: 'A beautiful freeform canvas for managing personal projects and tasks, enhanced with Gemini AI.',
   metadataBase: new URL(siteUrl),
   icons: {
@@ -15,16 +15,16 @@ export const metadata: Metadata = {
     apple: '/favicon.svg',
   },
   openGraph: {
-    title: 'Planboard AI — Personal Project Canvas',
+    title: 'Planboard — AI-powered Personal Project Canvas',
     description: 'A beautiful freeform canvas for managing personal projects and tasks, enhanced with Gemini AI.',
     url: siteUrl,
-    siteName: 'Planboard AI',
+    siteName: 'Planboard',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Planboard AI — Personal Project Canvas',
+    title: 'Planboard — AI-powered Personal Project Canvas',
     description: 'A beautiful freeform canvas for managing personal projects and tasks, enhanced with Gemini AI.',
   },
 };
