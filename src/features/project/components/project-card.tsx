@@ -46,17 +46,35 @@ const TAB_CONFIG = [
 
 function useDragReorder(tasks: ProjectTask[], onReorder: (t: ProjectTask[]) => void) {
   const fromIdx = useRef<number | null>(null);
+  const toIdx = useRef<number | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
-  const onDragStart = (idx: number, id: string) => { fromIdx.current = idx; setDraggingId(id); };
-  const onDragEnter = (id: string) => setOverId(id);
-  const onDragEnd = (toIdx: number) => {
-    const from = fromIdx.current;
-    if (from !== null && from !== toIdx) {
-      const arr = [...tasks]; const [item] = arr.splice(from, 1); arr.splice(toIdx, 0, item); onReorder(arr);
-    }
-    fromIdx.current = null; setDraggingId(null); setOverId(null);
+
+  const onDragStart = (idx: number, id: string) => { 
+    fromIdx.current = idx; 
+    setDraggingId(id); 
   };
+
+  const onDragEnter = (idx: number, id: string) => { 
+    toIdx.current = idx; 
+    setOverId(id); 
+  };
+
+  const onDragEnd = () => {
+    const from = fromIdx.current;
+    const to = toIdx.current;
+    if (from !== null && to !== null && from !== to) {
+      const arr = [...tasks]; 
+      const [item] = arr.splice(from, 1); 
+      arr.splice(to, 0, item); 
+      onReorder(arr);
+    }
+    fromIdx.current = null; 
+    toIdx.current = null;
+    setDraggingId(null); 
+    setOverId(null);
+  };
+
   return { onDragStart, onDragEnter, onDragEnd, draggingId, overId };
 }
 
@@ -77,6 +95,16 @@ export function ProjectCard({ project, isSelected, onSelect, onUpdate, onDelete,
   const [activeTab,     setActiveTab]     = useState<TabFilter>('all');
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editingTaskVal, setEditingTaskVal] = useState('');
+
+  const [isAnimating, setIsAnimating] = useState(false);
+  const prevMinimized = useRef(project.minimized);
+
+  useEffect(() => {
+    if (prevMinimized.current !== project.minimized) {
+      setIsAnimating(true);
+      prevMinimized.current = project.minimized;
+    }
+  }, [project.minimized]);
 
   useEffect(() => { setTitleVal(project.title);       }, [project.title]);
   useEffect(() => { setDescVal(project.description);  }, [project.description]);
@@ -167,6 +195,16 @@ export function ProjectCard({ project, isSelected, onSelect, onUpdate, onDelete,
   };
   const headerStyle = headerStyles[project.priority] || headerStyles.medium;
 
+  const transitionStyle = isAnimating
+    ? { transition: 'height 250ms cubic-bezier(0.4, 0, 0.2, 1), background-color 250ms cubic-bezier(0.4, 0, 0.2, 1), border-color 250ms cubic-bezier(0.4, 0, 0.2, 1)' }
+    : { transition: 'box-shadow 200ms, background-color 200ms, border-color 200ms' };
+
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (e.target === cardRef.current && e.propertyName === 'height') {
+      setIsAnimating(false);
+    }
+  };
+
   return (
     <div
       ref={cardRef}
@@ -176,17 +214,20 @@ export function ProjectCard({ project, isSelected, onSelect, onUpdate, onDelete,
         left: project.position.x,
         top:  project.position.y,
         width:  dims.width,
-        height: project.minimized ? 'auto' : dims.height,
+        height: project.minimized ? 40 : dims.height,
         userSelect: 'none',
+        overflow: (project.minimized || isAnimating) ? 'hidden' : 'visible',
+        ...transitionStyle,
       }}
-      className={`group flex flex-col overflow-visible transition-all duration-200
+      className={`group flex flex-col rounded-[20px]
         ${project.minimized 
-          ? `rounded-full bg-gradient-to-r border ${headerStyle}` 
-          : 'bg-white rounded-2xl border border-slate-200'
+          ? `bg-gradient-to-r border ${headerStyle}` 
+          : 'bg-white border border-slate-200'
         }
         ${isSelected ? 'ring-2 ring-indigo-500 ring-offset-1 shadow-lg' : 'hover:shadow-md'}
       `}
       onClick={e => { if (!moved.current) { e.stopPropagation(); onSelect(); } }}
+      onTransitionEnd={handleTransitionEnd}
     >
       {/* ── HEADER DRAG HANDLER (Shadcn card header style) ── */}
       <div
@@ -202,40 +243,54 @@ export function ProjectCard({ project, isSelected, onSelect, onUpdate, onDelete,
         style={{ touchAction: 'none' }}
         className={`h-10 w-full px-3.5 flex items-center justify-between cursor-grab active:cursor-grabbing select-none flex-shrink-0
           ${project.minimized
-            ? 'bg-transparent border-none rounded-full'
-            : `bg-gradient-to-r rounded-t-2xl border-b ${headerStyle}`
+            ? 'bg-transparent border-none rounded-[20px]'
+            : `bg-gradient-to-r rounded-t-[20px] border-b ${headerStyle}`
           }`}
       >
         <div className="flex items-center gap-2 flex-1 min-w-0">
           <Layers size={14} className="text-white/80 flex-shrink-0" />
-          {editTitle ? (
-            <input
-              autoFocus
-              value={titleVal}
-              onChange={e => setTitleVal(e.target.value)}
-              onBlur={saveTitle}
-              onClick={e => e.stopPropagation()}
-              onKeyDown={e => {
-                if (e.key === 'Enter') saveTitle();
-                if (e.key === 'Escape') {
-                  setTitleVal(project.title);
-                  setEditTitle(false);
-                }
-              }}
-              className="flex-1 bg-white/20 border border-white/10 rounded px-1.5 py-0.5 text-xs font-semibold outline-none text-white focus:bg-white/30 focus:border-white/30"
-            />
-          ) : (
-            <span
-              onDoubleClick={e => {
-                e.stopPropagation();
-                setEditTitle(true);
-              }}
-              title="Double-click to edit title"
-              className="text-xs font-semibold text-white truncate leading-none cursor-text hover:text-white/80 transition-colors"
-            >
-              {project.title || 'Project Board'}
-            </span>
-          )}
+          <div className="flex flex-col flex-1 min-w-0 justify-center">
+            {editTitle ? (
+              <input
+                autoFocus
+                value={titleVal}
+                onChange={e => setTitleVal(e.target.value)}
+                onBlur={saveTitle}
+                onClick={e => e.stopPropagation()}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') saveTitle();
+                  if (e.key === 'Escape') {
+                    setTitleVal(project.title);
+                    setEditTitle(false);
+                  }
+                }}
+                className="w-full bg-white/20 border border-white/10 rounded px-1.5 py-0.5 text-xs font-semibold outline-none text-white focus:bg-white/30 focus:border-white/30"
+              />
+            ) : (
+              <span
+                onDoubleClick={e => {
+                  e.stopPropagation();
+                  setEditTitle(true);
+                }}
+                title="Double-click to edit title"
+                className="text-xs font-semibold text-white truncate leading-tight cursor-text hover:text-white/80 transition-colors"
+              >
+                {project.title || 'Project Board'}
+              </span>
+            )}
+            {project.date && (
+              <span className="text-[9px] text-white/70 font-semibold leading-none mt-0.5 truncate">
+                {(() => {
+                  const [y, m, d] = project.date.split('-');
+                  if (y && m && d) {
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    return `${months[parseInt(m, 10) - 1]} ${parseInt(d, 10)}, ${y}`;
+                  }
+                  return project.date;
+                })()}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-0.5 flex-shrink-0" onClick={e => e.stopPropagation()} onPointerDown={e => e.stopPropagation()}>
@@ -261,8 +316,13 @@ export function ProjectCard({ project, isSelected, onSelect, onUpdate, onDelete,
           </button>
         </div>
       </div>
-      {!project.minimized && (
-        <>
+      <div
+        className="flex-1 flex flex-col min-h-0 transition-opacity duration-200"
+        style={{
+          opacity: project.minimized ? 0 : 1,
+          pointerEvents: project.minimized ? 'none' : 'auto',
+        }}
+      >
           {/* Quick Add Task Row */}
           <div className="px-3.5 pt-3 pb-2.5 flex gap-1.5 items-center flex-shrink-0 border-b border-slate-100/60" onClick={e => e.stopPropagation()}>
             <input
@@ -413,8 +473,8 @@ export function ProjectCard({ project, isSelected, onSelect, onUpdate, onDelete,
                     return (
                       <div key={task.id} draggable
                         onDragStart={() => onDragStart(ri, task.id)}
-                        onDragEnter={() => onDragEnter(task.id)}
-                        onDragEnd={()   => onDragEnd(ri)}
+                        onDragEnter={() => onDragEnter(ri, task.id)}
+                        onDragEnd={()   => onDragEnd()}
                         onDragOver={e  => e.preventDefault()}
                         className={`flex items-center gap-2 py-1.5 px-2 rounded-lg transition-all group/task hover:bg-slate-50
                           ${isDragging ? 'opacity-30 scale-95' : ''}
@@ -482,8 +542,7 @@ export function ProjectCard({ project, isSelected, onSelect, onUpdate, onDelete,
               <div className="w-2.5 h-2.5 rounded-sm border-b-2 border-r-2 border-slate-400" />
             </div>
           )}
-        </>
-      )}
+      </div>
     </div>
   );
 }
